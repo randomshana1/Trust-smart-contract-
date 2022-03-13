@@ -1,6 +1,7 @@
 pragma solidity ^0.8.1;
 
 contract Trust {
+    mapping()
     address public kid;
     uint256 public maturity;
 
