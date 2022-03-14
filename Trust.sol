@@ -18,8 +18,8 @@ contract Trust {
     } 
 
     function withdraw(address kid) external {
-        require(maturities[kid] <= block.timestamp, "too early");
-        require(amounts[kid] > 0, "only kid could withdraw");
+        require(maturities[msg.sender] <= block.timestamp, "too early");
+        require(amounts[msg.sender] > 0, "only kid could withdraw");
 
         // require(block.timestamp >= maturity, "too early");
         // require(msg.sender == kid, "only kid could withdraw");
