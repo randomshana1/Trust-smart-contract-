@@ -2,12 +2,12 @@ pragma solidity ^0.8.1;
 
 
 contract Trust {
-    struct kid {
+    struct Kid {
     uint amount;
     uint maturity;
     bool paid;
     }
-    mapping (address => kid) public kids;
+    mapping (address => Kid) public kids;
     mapping(address => uint) public amounts;
     mapping(address => uint) public maturities;
     mapping (address=>bool) public paid;
@@ -28,14 +28,16 @@ contract Trust {
         require(msg.sender == admin, 'only admin');
         require(amounts[msg.sender] == 0, "kid already exist");
         amounts[kid] =  msg.value;
+        kids[kid] = Kid (msg.value, block.timestamp+timeToMaturity, false);
         maturities[kid] = block.timestamp + timeToMaturity;
 
     } 
 
-    function withdraw(address kid) external {
-        require(maturities[msg.sender] <= block.timestamp, "too early");
-        require(amounts[msg.sender] > 0, "only kid could withdraw");
-        require(paid[msg.sender]== false, "paid already !");
+    function withdraw() external {
+        Kid storage kid = kids[msg.sender];
+        require(kid.maturity <= block.timestamp, "too early");
+        require(kid.amount > 0, "only kid could withdraw");
+        require(kid.paid == false, "paid already !");
         paid[msg.sender] = true;
         // require(block.timestamp >= maturity, "too early");
         // require(msg.sender == kid, "only kid could withdraw");
